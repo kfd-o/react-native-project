@@ -47,10 +47,12 @@ const LoginScreen = ({navigation}) => {
     // password: '@Kcprointetris082702',
     //  username: 'kunse',
     //  password: '@Kcprointetris082702'
-    // username: 'johndoe',
+    username: 'johndoe',
+    password: '@Kcprointetris082702',
+    // username: 'janesmith',
     // password: '@Kcprointetris082702',
-    username: 'administrator',
-    password: 'administrator',
+    // username: 'administrator',
+    // password: 'administrator',
   });
 
   const handleChange = (name, value) => {

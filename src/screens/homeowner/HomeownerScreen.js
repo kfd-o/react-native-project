@@ -21,7 +21,7 @@ const HomeownerScreen = ({navigation}) => {
   const fetchNotifications = async userId => {
     const accessToken = await AsyncStorage.getItem('accessToken');
     try {
-      const response = await api.get(`/request-visit/${userId}`, {
+      const response = await api.get(`/homeowner-notification/${userId}`, {
         headers: {Authorization: `Bearer ${accessToken}`},
       });
       setNotifications(response.data);

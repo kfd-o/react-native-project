@@ -388,7 +388,8 @@ const RequestScreen = ({route, navigation}) => {
                   <TouchableOpacity
                     style={{
                       borderWidth: 1,
-                      borderColor: '#1ABC9C',
+                      borderColor: '#E57373',
+                      backgroundColor: '#FFEBEE',
                       paddingVertical: hp('1%'),
                       paddingHorizontal: wp('2%'),
                       borderRadius: 6,
@@ -397,13 +398,13 @@ const RequestScreen = ({route, navigation}) => {
                       alignItems: 'center',
                     }}
                     onPress={() => setModalVisible(!modalVisible)}>
-                    <Text style={{color: '#1ABC9C'}}>Cancel</Text>
+                    <Text style={{color: '#E57373'}}>Cancel</Text>
                   </TouchableOpacity>
                   <TouchableOpacity
                     style={{
                       borderWidth: 1,
-                      borderColor: '#1ABC9C',
-                      backgroundColor: '#1ABC9C',
+                      borderColor: '#90CAF9',
+                      backgroundColor: '#E3F2FD',
                       paddingVertical: hp('1%'),
                       paddingHorizontal: wp('2%'),
                       borderRadius: 6,
@@ -412,7 +413,7 @@ const RequestScreen = ({route, navigation}) => {
                       alignItems: 'center',
                     }}
                     onPress={handleSubmit}>
-                    <Text style={{color: '#fff'}}>Confirm</Text>
+                    <Text style={{color: '#1E88E5'}}>Confirm</Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -439,7 +440,7 @@ const RequestScreen = ({route, navigation}) => {
                   }}>
                   <View
                     style={{justifyContent: 'center', alignItems: 'center'}}>
-                    <Icon name="check-circle" size={hp('6%')} color="#1ABC9C" />
+                    <Icon name="check-circle" size={hp('6%')} color="#81C784" />
                   </View>
                   <Text
                     style={{
@@ -472,7 +473,8 @@ const RequestScreen = ({route, navigation}) => {
                   <TouchableOpacity
                     style={{
                       borderWidth: 1,
-                      borderColor: '#1ABC9C',
+                      borderColor: '#81C784',
+                      backgroundColor: '#E8F5E9',
                       paddingVertical: hp('1.5%'),
                       paddingHorizontal: wp('2%'),
                       borderRadius: 6,
@@ -481,7 +483,7 @@ const RequestScreen = ({route, navigation}) => {
                       alignItems: 'center',
                     }}
                     onPress={handleContinue}>
-                    <Text style={{color: '#1ABC9C'}}>Continue</Text>
+                    <Text style={{color: '#388E3C'}}>Continue</Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -511,7 +513,7 @@ const RequestScreen = ({route, navigation}) => {
                   }}>
                   <View
                     style={{justifyContent: 'center', alignItems: 'center'}}>
-                    <Icon name="error" size={hp('6%')} color="#36454F" />
+                    <Icon name="error" size={hp('6%')} color="#E57373" />
                   </View>
                   <Text
                     style={{
@@ -548,16 +550,16 @@ const RequestScreen = ({route, navigation}) => {
                   <TouchableOpacity
                     style={{
                       borderWidth: 1,
-                      borderColor: '#1ABC9C',
+                      borderColor: '#E57373',
                       paddingVertical: hp('1.5%'),
-
+                      backgroundColor: '#FFEBEE',
                       borderRadius: 6,
                       width: wp('58%'),
                       justifyContent: 'center',
                       alignItems: 'center',
                     }}
                     onPress={handleContinueError}>
-                    <Text style={{color: '#1ABC9C'}}>Continue</Text>
+                    <Text style={{color: '#E57373'}}>Continue</Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -601,14 +603,12 @@ const RequestScreen = ({route, navigation}) => {
           closeOnBackPressed={true}
           zIndex={4000}
           style={{
-            backgroundColor: '#f6f8fa',
-
-            ...(errors.homeowner_id
-              ? {borderWidth: 1, borderColor: 'red'}
-              : {borderWidth: 0}),
+            backgroundColor: errors.homeowner_id ? '#FFEBEE' : '#f6f8fa',
+            borderWidth: errors.homeowner_id ? 1 : 0,
+            borderColor: errors.homeowner_id && '#E57373',
           }}
           placeholderStyle={{
-            color: errors.homeowner_id ? 'red' : '#85929E',
+            color: errors.homeowner_id ? '#E57373' : '#85929E',
           }}
           textStyle={{
             color: '#85929E',
@@ -674,14 +674,13 @@ const RequestScreen = ({route, navigation}) => {
           zIndex={3000}
           onChangeValue={handleDropDownChangeClassify}
           style={{
-            backgroundColor: '#f6f8fa',
+            backgroundColor: errors.classify_as ? '#FFEBEE' : '#f6f8fa',
             marginTop: hp('1%'),
-            ...(errors.classify_as
-              ? {borderWidth: 1, borderColor: 'red'}
-              : {borderWidth: 0}),
+            borderWidth: errors.classify_as ? 1 : 0,
+            borderColor: errors.classify_as && '#E57373',
           }}
           placeholderStyle={{
-            color: errors.classify_as ? 'red' : '#85929E',
+            color: errors.classify_as ? '#E57373' : '#85929E',
           }}
           textStyle={{
             color: '#85929E',
@@ -922,19 +921,23 @@ const styles = StyleSheet.create({
   submitButton: {
     marginTop: hp('6%'),
     paddingVertical: hp('1.6%'),
-    backgroundColor: '#1ABC9C',
+    backgroundColor: '#E3F2FD',
     borderRadius: 4,
+    borderWidth: 1,
+    borderColor: '#90CAF9',
     alignItems: 'center',
   },
   submitButtonContractual: {
     marginTop: hp('4%'),
     paddingVertical: hp('1.6%'),
-    backgroundColor: '#1ABC9C',
+    backgroundColor: '#E3F2FD',
+    borderWidth: 1,
+    borderColor: '#90CAF9',
     borderRadius: 4,
     alignItems: 'center',
   },
   submitButtonText: {
-    color: '#fff',
+    color: '#1E88E5',
   },
   modalOverlay: {
     flex: 1,

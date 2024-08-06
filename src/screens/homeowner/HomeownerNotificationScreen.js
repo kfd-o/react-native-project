@@ -22,10 +22,12 @@ const HomeownerNotificationScreen = ({navigation}) => {
   const [userData, setUserData] = useState(null);
   const [notifications, setNotifications] = useState([]);
   const socket = useRef(null);
+  console.log('USERRRRRRRRRRRRRRRRRRR', userData);
+
   const fetchNotifications = async userId => {
     const accessToken = await AsyncStorage.getItem('accessToken');
     try {
-      const response = await api.get(`/request-visit/${userId}`, {
+      const response = await api.get(`/homeowner-notification/${userId}`, {
         headers: {Authorization: `Bearer ${accessToken}`},
       });
       setNotifications(response.data);
@@ -110,18 +112,14 @@ const HomeownerNotificationScreen = ({navigation}) => {
     }, [userData]),
   );
 
-  const markNotificationsAsRead = async notifications => {
+  const markNotificationsAsRead = async userId => {
     const accessToken = await AsyncStorage.getItem('accessToken');
 
     for (const notif of notifications) {
       try {
-        await api.patch(
-          `/request-visit/is-read/${notif.visitor_id}/${notif.homeowner_id}`,
-          null,
-          {
-            headers: {Authorization: `Bearer ${accessToken}`},
-          },
-        );
+        await api.patch(`/request-visit/is-read/${userId}`, null, {
+          headers: {Authorization: `Bearer ${accessToken}`},
+        });
       } catch (error) {
         console.log('It is already read!');
       }
@@ -132,7 +130,7 @@ const HomeownerNotificationScreen = ({navigation}) => {
     useCallback(() => {
       const initializeNotifications = async () => {
         if (notifications.length > 0) {
-          await markNotificationsAsRead(notifications);
+          await markNotificationsAsRead(userData.id);
         }
       };
       initializeNotifications();
@@ -198,7 +196,7 @@ const HomeownerNotificationScreen = ({navigation}) => {
               key={notif.id}
               onPress={() =>
                 navigation.navigate('HomeownerNotificationDetails', {
-                  id: notif.id,
+                  id: notif.rv_id,
                 })
               }>
               <View style={styles.notificationLeft}>

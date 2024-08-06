@@ -6,6 +6,7 @@ import {
   Modal,
   ScrollView,
   TouchableWithoutFeedback,
+  Linking,
 } from 'react-native';
 import React, {useState, useEffect} from 'react';
 import {
@@ -17,6 +18,7 @@ import {format} from 'date-fns';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import api from '../../api/api';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 const HomeownerNotificationDetails = ({route, navigation}) => {
   const {id} = route.params;
@@ -27,7 +29,7 @@ const HomeownerNotificationDetails = ({route, navigation}) => {
   const fetchNotificationsById = async id => {
     const accessToken = await AsyncStorage.getItem('accessToken');
     try {
-      const response = await api.get(`/request-visit/fetch-id/${id}`, {
+      const response = await api.get(`/request-visit/fetch/${id}`, {
         headers: {Authorization: `Bearer ${accessToken}`},
       });
       setNotifications(response.data);
@@ -36,6 +38,7 @@ const HomeownerNotificationDetails = ({route, navigation}) => {
       console.log(error);
     }
   };
+  console.log('----------------->', notifications);
 
   const formatDate = dateString => {
     return format(new Date(dateString), 'yyyy-MM-dd');
@@ -58,12 +61,14 @@ const HomeownerNotificationDetails = ({route, navigation}) => {
     setModalVisible(!modalVisible);
   };
 
+  console.log('-------------->', notifications);
+
   const handleConfirm = async () => {
     try {
       const response = await api.patch(
-        `/request-visit/approved/${notifications[0].visitor_id}/${notifications[0].homeowner_id}`,
+        `/request-visit/approved/${notifications[0].rv_id}`,
       );
-      console.log(response);
+      // console.log(response);
       if (response.status === 200) {
         setModalVisible(!modalVisible);
         setModalSuccessVisible(!modalSuccessVisible);
@@ -76,6 +81,20 @@ const HomeownerNotificationDetails = ({route, navigation}) => {
 
   const handleContinue = () => {
     setModalSuccessVisible(!modalSuccessVisible);
+  };
+
+  const openURL = async url => {
+    try {
+      const supported = await Linking.canOpenURL(url);
+      if (supported) {
+        await Linking.openURL(url);
+      } else {
+        Alert.alert(`Don't know how to open ${url}`);
+      }
+    } catch (error) {
+      console.error('An error occurred', error);
+      Alert.alert('Failed to open URL');
+    }
   };
 
   useEffect(() => {
@@ -139,8 +158,8 @@ const HomeownerNotificationDetails = ({route, navigation}) => {
                 <TouchableOpacity
                   style={{
                     borderWidth: 1,
-                    borderColor: '#1ABC9C',
-                    backgroundColor: '#1ABC9C',
+                    borderColor: '#E57373',
+                    backgroundColor: '#FFEBEE',
                     width: wp('30%'),
                     paddingVertical: hp('1.4%'),
                     borderRadius: 6,
@@ -148,14 +167,15 @@ const HomeownerNotificationDetails = ({route, navigation}) => {
                     alignItems: 'center',
                   }}
                   onPress={handleCancel}>
-                  <Text style={{color: '#fff', fontSize: hp('2%')}}>
+                  <Text style={{color: '#D32F2F', fontSize: hp('2%')}}>
                     Cancel
                   </Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                   style={{
                     borderWidth: 1,
-                    borderColor: '#1ABC9C',
+                    borderColor: '#90CAF9',
+                    backgroundColor: '#E3F2FD',
                     borderRadius: 6,
                     width: wp('30%'),
                     paddingVertical: hp('1.4%'),
@@ -163,7 +183,7 @@ const HomeownerNotificationDetails = ({route, navigation}) => {
                     alignItems: 'center',
                   }}
                   onPress={handleConfirm}>
-                  <Text style={{color: '#1ABC9C', fontSize: hp('2%')}}>
+                  <Text style={{color: '#1E88E5', fontSize: hp('2%')}}>
                     Confirm
                   </Text>
                 </TouchableOpacity>
@@ -192,9 +212,9 @@ const HomeownerNotificationDetails = ({route, navigation}) => {
                   paddingTop: hp('2%'),
                 }}>
                 <Ionicons
-                  name="checkmark-circle-outline"
+                  name="checkmark-circle"
                   size={hp('6%')}
-                  color="#1ABC9C"
+                  color="#81C784"
                 />
                 <Text
                   style={{
@@ -234,7 +254,8 @@ const HomeownerNotificationDetails = ({route, navigation}) => {
                 <TouchableOpacity
                   style={{
                     borderWidth: 1,
-                    borderColor: '#1ABC9C',
+                    borderColor: '#81C784',
+                    backgroundColor: '#E8F5E9',
                     paddingVertical: hp('1.5%'),
                     borderRadius: 6,
                     width: wp('50%'),
@@ -242,7 +263,7 @@ const HomeownerNotificationDetails = ({route, navigation}) => {
                     alignItems: 'center',
                   }}
                   onPress={handleContinue}>
-                  <Text style={{color: '#1ABC9C', fontSize: hp('2%')}}>
+                  <Text style={{color: '#388E3C', fontSize: hp('2%')}}>
                     Continue
                   </Text>
                 </TouchableOpacity>
@@ -254,7 +275,7 @@ const HomeownerNotificationDetails = ({route, navigation}) => {
 
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Icon name="arrow-back" size={hp('3%')} color="#5D6D7E" />
+          <Icon name="arrow-back" size={hp('3.6%')} color="#5D6D7E" />
         </TouchableOpacity>
         <Text style={styles.headerText}>Visitor Details</Text>
       </View>
@@ -265,7 +286,7 @@ const HomeownerNotificationDetails = ({route, navigation}) => {
               style={{
                 alignItems: 'center',
                 gap: hp('1%'),
-                paddingVertical: hp('10%'),
+                paddingVertical: hp('6%'),
                 justifyContent: 'center',
               }}>
               <View
@@ -286,38 +307,41 @@ const HomeownerNotificationDetails = ({route, navigation}) => {
                   {notif.first_name[0]}
                 </Text>
               </View>
-              <View>
-                <Text
-                  style={{
-                    color: '#5D6D7E',
-                    fontSize: hp('2.3%'),
-                    fontWeight: '500',
-                  }}>
-                  {notif.first_name} {notif.last_name}
-                </Text>
+              <View
+                style={{
+                  width: wp('50%'),
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                <View style={{position: 'absolute', left: 0}}>
+                  <TouchableOpacity
+                    onPress={() => openURL(`tel:${notif.contact_num}`)}>
+                    <MaterialIcons
+                      name="call"
+                      size={hp('3.6%')}
+                      color="#5D6D7E"
+                    />
+                  </TouchableOpacity>
+                </View>
+                <View>
+                  <Text
+                    style={{
+                      color: '#5D6D7E',
+                      fontSize: hp('2.4%'),
+                      fontWeight: '500',
+                    }}>
+                    {notif.first_name} {notif.last_name}
+                  </Text>
+                </View>
               </View>
             </View>
           </TouchableWithoutFeedback>
-          <View style={{gap: hp('3%')}}>
+          <View style={{gap: hp('5%')}}>
             <View>
               <Text
                 style={{
                   color: '#5D6D7E',
-                  fontSize: hp('2.2%'),
-                }}>
-                Contact Number
-              </Text>
-              <View>
-                <Text style={{color: '#85929E', fontSize: hp('2%')}}>
-                  {notif.contact_num}
-                </Text>
-              </View>
-            </View>
-            <View>
-              <Text
-                style={{
-                  color: '#5D6D7E',
-                  fontSize: hp('2.2%'),
+                  fontSize: hp('2.4%'),
                 }}>
                 Visitor Classification
               </Text>
@@ -333,7 +357,7 @@ const HomeownerNotificationDetails = ({route, navigation}) => {
                 <Text
                   style={{
                     color: '#5D6D7E',
-                    fontSize: hp('2.2%'),
+                    fontSize: hp('2.4%'),
                     paddingVertical: hp('1%'),
                   }}>
                   Contract Range
@@ -344,7 +368,7 @@ const HomeownerNotificationDetails = ({route, navigation}) => {
                     gap: wp('2%'),
                   }}>
                   <View>
-                    <Text style={{color: '#85929E', fontSize: hp('1.7%')}}>
+                    <Text style={{color: '#85929E', fontSize: hp('1.6%')}}>
                       Start Of Contract
                     </Text>
                     <View style={{width: wp('45%')}}>
@@ -355,7 +379,7 @@ const HomeownerNotificationDetails = ({route, navigation}) => {
                   </View>
 
                   <View>
-                    <Text style={{color: '#85929E', fontSize: hp('1.7%')}}>
+                    <Text style={{color: '#85929E', fontSize: hp('1.6%')}}>
                       End Of Contract
                     </Text>
                     <View style={{width: wp('45%')}}>
@@ -372,7 +396,7 @@ const HomeownerNotificationDetails = ({route, navigation}) => {
               <Text
                 style={{
                   color: '#5D6D7E',
-                  fontSize: hp('2.2%'),
+                  fontSize: hp('2.4%'),
                   paddingVertical: hp('1%'),
                 }}>
                 Date Visit
@@ -383,7 +407,7 @@ const HomeownerNotificationDetails = ({route, navigation}) => {
                   gap: wp('2%'),
                 }}>
                 <View>
-                  <Text style={{color: '#85929E', fontSize: hp('1.7%')}}>
+                  <Text style={{color: '#85929E', fontSize: hp('1.6%')}}>
                     Date
                   </Text>
                   <View style={{width: wp('45%')}}>
@@ -393,7 +417,7 @@ const HomeownerNotificationDetails = ({route, navigation}) => {
                   </View>
                 </View>
                 <View>
-                  <Text style={{color: '#85929E', fontSize: hp('1.7%')}}>
+                  <Text style={{color: '#85929E', fontSize: hp('1.6%')}}>
                     Time
                   </Text>
                   <View style={{width: wp('45%')}}>
@@ -404,33 +428,45 @@ const HomeownerNotificationDetails = ({route, navigation}) => {
                 </View>
               </View>
             </View>
+            <View>
+              <Text
+                style={{
+                  color: '#5D6D7E',
+                  fontSize: hp('2.4%'),
+                }}>
+                Contact Number
+              </Text>
+              <View>
+                <Text style={{color: '#85929E', fontSize: hp('2%')}}>
+                  {notif.contact_num}
+                </Text>
+              </View>
+            </View>
             {notif.status === 'approved' && (
               <View
                 style={{
                   flexDirection: 'row',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  backgroundColor: '#E8F6F3',
+                  backgroundColor: '#E8F5E9',
                   paddingVertical: hp('2%'),
-                  elevation: 2,
-                  marginTop: hp('2%'),
-
+                  elevation: 4,
+                  marginTop: hp('1%'),
                   borderRadius: 50,
                   gap: wp('2%'),
                 }}>
                 <View style={{}}>
                   <Ionicons
-                    name="checkmark-circle-outline"
+                    name="checkmark-circle"
                     size={hp('4%')}
-                    color="#16A085"
+                    color="#81C784"
                   />
                 </View>
                 <View>
                   <Text
                     style={{
-                      color: '#16A085',
+                      color: '#388E3C',
                       fontSize: hp('2.3%'),
-                      fontWeight: '500',
                     }}>
                     Approved
                   </Text>
@@ -442,18 +478,20 @@ const HomeownerNotificationDetails = ({route, navigation}) => {
                 style={{
                   flexDirection: 'row',
                   gap: hp('1%'),
-                  paddingVertical: hp('4%'),
+                  paddingVertical: hp('2%'),
                 }}>
                 <TouchableOpacity
                   style={{
-                    backgroundColor: '#36454F',
+                    backgroundColor: '#FFEBEE',
                     paddingVertical: hp('2%'),
+                    borderColor: '#E57373',
+                    borderWidth: 1,
                     width: wp('45%'),
                     borderRadius: 4,
                   }}>
                   <Text
                     style={{
-                      color: '#fff',
+                      color: '#E57373',
                       alignSelf: 'center',
                       fontSize: hp('2%'),
                     }}>
@@ -462,15 +500,17 @@ const HomeownerNotificationDetails = ({route, navigation}) => {
                 </TouchableOpacity>
                 <TouchableOpacity
                   style={{
-                    backgroundColor: '#1ABC9C',
+                    backgroundColor: '#E3F2FD',
+                    borderWidth: 1,
+                    borderColor: '#90CAF9',
                     paddingVertical: hp('2%'),
                     width: wp('45%'),
-                    borderRadius: 6,
+                    borderRadius: 4,
                   }}
                   onPress={handleApprove}>
                   <Text
                     style={{
-                      color: '#fff',
+                      color: '#1E88E5',
                       alignSelf: 'center',
                       fontSize: hp('2%'),
                     }}>
@@ -501,7 +541,7 @@ const styles = StyleSheet.create({
   headerText: {
     color: '#5D6D7E',
     fontWeight: '500',
-    fontSize: hp('2.3%'),
+    fontSize: hp('2.6%'),
   },
   inputContainer: {
     backgroundColor: '#f6f8fa',
