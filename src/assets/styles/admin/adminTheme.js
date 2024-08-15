@@ -25,20 +25,24 @@ const lightStyles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     gap: hp('1.4%'),
+    backgroundColor: '#f6f8fa',
   },
   dataText: {
-    color: '#fff',
-    fontSize: hp('3%'),
+    color: '#000',
+    fontSize: hp('3.5%'),
     textAlign: 'center',
   },
   dataSubText: {
-    color: '#fff',
-    fontSize: hp('1.5%'),
+    color: '#666666',
+    fontSize: hp('2%'),
     textAlign: 'center',
   },
   headerAnalytics: {
-    color: '#5D6D7E',
-    fontSize: hp('2.4%'),
+    color: '#000',
+    fontSize: hp('2.8%'),
+    fontWeight: '500',
+    marginTop: hp('5%'),
+    paddingVertical: hp('2%'),
   },
   analyticsContainer: {
     gap: 6,
@@ -69,18 +73,21 @@ const lightStyles = StyleSheet.create({
     borderRadius: 50,
   },
   profileInitial: {
-    fontSize: hp('2.6%'),
+    fontSize: hp('2%'),
     color: 'white',
   },
   profileName: {
-    color: '#5D6D7E',
+    color: '#000',
     fontSize: hp('2%'),
+    fontWeight: '500',
   },
   notificationIcon: {
     flexDirection: 'row',
-    gap: 14,
+    gap: 25,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  iconColor: '#5D6D7E',
+  iconColor: '#000',
 });
 
 const darkStyles = StyleSheet.create({
@@ -105,20 +112,24 @@ const darkStyles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     gap: hp('1.4%'),
+    backgroundColor: '#f2f2f2',
   },
   dataText: {
     color: '#f1f1f1',
     fontSize: hp('3%'),
     textAlign: 'center',
+    fontWeight: '500',
   },
   dataSubText: {
     color: '#fff',
     fontSize: hp('1.5%'),
     textAlign: 'center',
+    fontWeight: '500',
   },
   headerAnalytics: {
     color: '#f1f1f1',
-    fontSize: hp('2.4%'),
+    fontSize: hp('3.4%'),
+    fontWeight: '500',
   },
   analyticsContainer: {
     gap: 6,
@@ -152,13 +163,16 @@ const darkStyles = StyleSheet.create({
     color: 'white',
   },
   profileName: {
-    color: '#f1f1f1',
+    color: '#fff',
     fontSize: hp('2%'),
   },
   notificationIcon: {
     flexDirection: 'row',
-    gap: 14,
+    gap: 25,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
+  iconColor: '#fff',
 });
 
 export const getStyles = theme => (theme === 'dark' ? darkStyles : lightStyles);

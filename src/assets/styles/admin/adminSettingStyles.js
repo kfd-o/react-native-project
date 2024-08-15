@@ -20,53 +20,41 @@ const lightStyles = StyleSheet.create({
     color: '#85929E',
     fontSize: hp('1.8%'),
   },
-  containerSettings: {
-    backgroundColor: '#f6f8fa',
-    borderRadius: hp('1%'),
-    marginVertical: hp('2%'),
+  themeOptionContainer: {
+    gap: 10,
+    justifyContent: 'flex-start',
+    flex: 1,
   },
   themeOption: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: wp('6%'),
+    backgroundColor: '#f6f8fa',
+    paddingLeft: wp('6%'),
+    paddingRight: wp('2%'),
     paddingVertical: hp('2%'),
+    borderRadius: hp('1%'),
   },
   themeOptionIcon: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: wp('5%'),
   },
-  iconColor: '#5D6D7E',
+  iconColor: '#000',
   optionText: {
-    color: '#5D6D7E',
+    color: '#000',
     fontSize: hp('2%'),
   },
-  logoutButton: {
-    backgroundColor: '#FFD6CC',
-    paddingVertical: hp('1%'),
-    paddingHorizontal: wp('6.4%'),
-    borderRadius: hp('1%'),
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  logoutText: {
-    fontSize: hp('2%'),
-    color: '#FF6347',
-  },
+
   primaryText: {
-    color: '#5D6D7E',
+    fontSize: hp('2%'),
+    color: '#000',
   },
   secondaryText: {
-    color: '#85929E',
+    fontSize: hp('1.8%'),
+    color: '#666',
   },
-  arrowBack: '#5D6D7E',
-  headerText: {
-    color: '#5D6D7E',
-    fontWeight: '600',
-    fontSize: hp('2.6%'),
-  },
+
   profileContainer: {
     borderRadius: hp('100%'),
     width: hp('14%'),
@@ -118,31 +106,14 @@ const darkStyles = StyleSheet.create({
     color: '#B0B0B0',
     fontSize: hp('2%'),
   },
-  logoutButton: {
-    backgroundColor: '#FFD6CC',
-    paddingVertical: hp('1%'),
-    paddingHorizontal: wp('6.4%'),
-    borderRadius: hp('1%'),
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  logoutText: {
-    fontSize: hp('2%'),
-    color: '#FF6347',
-  },
+
   primaryText: {
     color: '#E0E0E0',
   },
   secondaryText: {
     color: '#B0B0B0',
   },
-  arrowBack: '#f1f1f1',
-  headerText: {
-    color: '#5D6D7E',
-    fontWeight: '600',
-    fontSize: hp('2.6%'),
-  },
+
   profileContainer: {
     borderRadius: hp('100%'),
     width: hp('14%'),

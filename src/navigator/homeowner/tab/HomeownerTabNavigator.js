@@ -26,13 +26,13 @@ const HomeownerTabNavigator = () => {
 
           switch (route.name) {
             case 'HomeownerScreen':
-              iconName = focused ? 'home-variant' : 'home-variant-outline';
+              iconName = 'home-variant';
               break;
             case 'HomeownerRequestRFID':
-              iconName = focused ? 'rectangle' : 'rectangle-outline';
+              iconName = 'rectangle';
               break;
             case 'HomeownerSettingScreen':
-              iconName = focused ? 'account' : 'account-outline';
+              iconName = 'account';
               break;
             default:
               break;

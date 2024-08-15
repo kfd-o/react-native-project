@@ -133,8 +133,8 @@ const AdminSettingScreen = ({navigation}) => {
         style={{
           alignItems: 'center',
           gap: 10,
-          marginTop: hp('2%'),
-          paddingVertical: hp('5%'),
+          justifyContent: 'center',
+          flex: 1,
         }}>
         <TouchableWithoutFeedback>
           <View
@@ -157,16 +157,14 @@ const AdminSettingScreen = ({navigation}) => {
           </Text>
         </View>
       </View>
-
-      <Text style={styles.subHeader}>General</Text>
-      <View style={styles.containerSettings}>
+      <View style={styles.themeOptionContainer}>
         <TouchableOpacity
           style={styles.themeOption}
           onPress={() => navigation.navigate('AccountScreen')}>
           <View style={styles.themeOptionIcon}>
             <MaterialCommunityIcons
               name="account"
-              size={hp('2%')}
+              size={hp('2.6%')}
               color={styles.iconColor}
             />
             <Text style={styles.optionText}>Account</Text>
@@ -179,9 +177,65 @@ const AdminSettingScreen = ({navigation}) => {
             />
           </View>
         </TouchableOpacity>
-      </View>
-      <Text style={styles.subHeader}>Apperance</Text>
-      <View style={styles.containerSettings}>
+
+        <TouchableOpacity
+          style={styles.themeOption}
+          onPress={() => navigation.navigate('AccountScreen')}>
+          <View style={styles.themeOptionIcon}>
+            <MaterialIcons
+              name="notifications"
+              size={hp('2.6%')}
+              color={styles.iconColor}
+            />
+            <Text style={styles.optionText}>Notifications</Text>
+          </View>
+          <View>
+            <MaterialIcons
+              name={'keyboard-arrow-right'}
+              size={hp('2.4%')}
+              color={styles.iconColor}
+            />
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.themeOption}
+          onPress={() => navigation.navigate('AccountScreen')}>
+          <View style={styles.themeOptionIcon}>
+            <MaterialCommunityIcons
+              name="circle-opacity"
+              size={hp('2.6%')}
+              color={styles.iconColor}
+            />
+            <Text style={styles.optionText}>Appearance</Text>
+          </View>
+          <View>
+            <MaterialIcons
+              name={'keyboard-arrow-right'}
+              size={hp('2.4%')}
+              color={styles.iconColor}
+            />
+          </View>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.themeOption} onPress={handleLogout}>
+          <View style={styles.themeOptionIcon}>
+            <MaterialCommunityIcons
+              name="logout"
+              size={hp('2.6%')}
+              color={styles.iconColor}
+            />
+            <Text style={styles.optionText}>Sign out</Text>
+          </View>
+          <View>
+            <MaterialIcons
+              name={'keyboard-arrow-right'}
+              size={hp('2.4%')}
+              color={styles.iconColor}
+            />
+          </View>
+        </TouchableOpacity>
+
+        {/* <View>
         <TouchableOpacity style={styles.themeOption} onPress={handleLight}>
           <View
             style={{flexDirection: 'row', alignItems: 'center', gap: wp('5%')}}>
@@ -248,11 +302,7 @@ const AdminSettingScreen = ({navigation}) => {
             />
           </View>
         </TouchableOpacity>
-      </View>
-      <View>
-        <Pressable style={styles.logoutButton} onPress={handleLogout}>
-          <Text style={styles.logoutText}>Sign out</Text>
-        </Pressable>
+      </View> */}
       </View>
     </View>
   );

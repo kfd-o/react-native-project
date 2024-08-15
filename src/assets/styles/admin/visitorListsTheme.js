@@ -11,7 +11,7 @@ const lightStyles = StyleSheet.create({
     paddingHorizontal: wp('4%'),
   },
   data: {
-    borderRadius: hp('1%'),
+    borderRadius: 4,
     backgroundColor: '#f6f8fa',
     flexDirection: 'row',
     gap: wp('3%'),

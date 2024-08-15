@@ -15,11 +15,11 @@ const CustomTabBar = ({state, descriptors, navigation, bottomSheetRef}) => {
     let IconComponent = MaterialIcons;
     switch (routeName) {
       case 'AdminScreen':
-        iconName = focused ? 'home-variant' : 'home-variant-outline';
+        iconName = 'home-variant';
         IconComponent = MaterialCommunityIcons;
         break;
       case 'AdminSettingScreen':
-        iconName = focused ? 'account' : 'account-outline';
+        iconName = 'account';
         IconComponent = MaterialCommunityIcons;
         break;
       default:
@@ -29,7 +29,7 @@ const CustomTabBar = ({state, descriptors, navigation, bottomSheetRef}) => {
       <IconComponent
         name={iconName}
         size={hp('3.6%')}
-        color={styles.vectorIcon.color}
+        color={styles.iconColor}
       />
     );
   };
@@ -60,7 +60,7 @@ const CustomTabBar = ({state, descriptors, navigation, bottomSheetRef}) => {
             {renderIcon(route.name, isFocused)}
             <Text
               style={{
-                color: styles.vectorIconText.color,
+                color: styles.iconColor,
                 fontSize: hp('1.4%'),
               }}>
               {options.tabBarLabel}
@@ -75,11 +75,7 @@ const CustomTabBar = ({state, descriptors, navigation, bottomSheetRef}) => {
           onPress={() => {
             bottomSheetRef.current.expand();
           }}>
-          <MaterialIcons
-            name="add"
-            size={hp('3%')}
-            color={styles.addIconColor.color}
-          />
+          <MaterialIcons name="add" size={hp('3%')} color={styles.iconColor} />
         </TouchableOpacity>
       </View>
     </View>

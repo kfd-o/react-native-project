@@ -47,7 +47,7 @@ const VisitorListsScreen = ({navigation}) => {
   useEffect(() => {
     fetchVisitors();
 
-    socket.current = io('http://192.168.100.91:8080');
+    socket.current = io('http://192.168.32.11:8080');
 
     socket.current.on('connect', () => {
       console.log('Connected to Socket.IO server');

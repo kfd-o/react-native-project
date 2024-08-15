@@ -7,21 +7,30 @@ import {
   Text,
   TouchableOpacity,
   useColorScheme,
+  Button,
 } from 'react-native';
 import {useFocusEffect} from '@react-navigation/native';
 import io from 'socket.io-client';
 import {getStyles} from '../../assets/styles/admin/adminTheme';
 import api from '../../api/api';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useSelector} from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import {
+  heightPercentageToDP as hp,
+  widthPercentageToDP as wp,
+} from 'react-native-responsive-screen';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import {SOCKET_IO} from '@env';
 
 const AdminScreen = ({navigation}) => {
   const [userData, setUserData] = useState([]);
   const [homeowners, setHomeowners] = useState([]);
   const [securityPersonnels, setSecurityPersonnels] = useState([]);
   const [visitors, setVisitors] = useState([]);
+  const [todayVisitors, setTodayVisitors] = useState([]);
+  const [upcomingVisitors, setUpcomingVisitors] = useState([]);
   const [backPressCount, setBackPressCount] = useState(0);
   const theme = useSelector(state => state.theme.value);
   const styles = getStyles(theme);
@@ -32,7 +41,7 @@ const AdminScreen = ({navigation}) => {
       const response = await api.get('/protected/homeowner');
       setHomeowners(response.data);
     } catch (error) {
-      console.error('Error fetching visitors:', error);
+      console.error('Error fetching homeowners:', error);
     }
   };
 
@@ -41,7 +50,7 @@ const AdminScreen = ({navigation}) => {
       const response = await api.get('/protected/security-personnel');
       setSecurityPersonnels(response.data);
     } catch (error) {
-      console.error('Error fetching visitors:', error);
+      console.error('Error fetching security personnel:', error);
     }
   };
 
@@ -49,6 +58,24 @@ const AdminScreen = ({navigation}) => {
     try {
       const response = await api.get('/protected/visitor');
       setVisitors(response.data);
+    } catch (error) {
+      console.error('Error fetching visitors:', error);
+    }
+  };
+
+  const fetchTodayVisitors = async () => {
+    try {
+      const response = await api.get('/today-visitors');
+      setTodayVisitors(response.data);
+    } catch (error) {
+      console.error('Error fetching visitors:', error);
+    }
+  };
+
+  const fetchUpcomingVisitors = async () => {
+    try {
+      const response = await api.get('/upcoming-visitors');
+      setUpcomingVisitors(response.data);
     } catch (error) {
       console.error('Error fetching visitors:', error);
     }
@@ -114,13 +141,17 @@ const AdminScreen = ({navigation}) => {
     }, [backPressCount]),
   );
 
+  console.log(upcomingVisitors);
+
   useEffect(() => {
     checkToken();
     fetchHomeowners();
     fetchSecurityPersonnels();
     fetchVisitors();
+    fetchTodayVisitors();
+    fetchUpcomingVisitors();
 
-    socket.current = io('http://192.168.100.91:8080');
+    socket.current = io(SOCKET_IO);
     socket.current.on('connect', () => {
       console.log('Connected to Socket.IO server');
     });
@@ -135,92 +166,206 @@ const AdminScreen = ({navigation}) => {
   }, []);
 
   return (
-    <ScrollView style={styles.container}>
-      <View style={styles.header}>
-        <View style={styles.profile}>
+    <View style={styles.container}>
+      <ScrollView>
+        <View style={styles.header}>
+          <View style={styles.profile}>
+            <TouchableOpacity
+              style={[
+                styles.profileIcon,
+                {backgroundColor: userData.profile_color},
+              ]}
+              onPress={() => navigation.navigate('AdminSettingScreen')}>
+              <Text style={styles.profileInitial}>
+                {userData.first_name && userData.first_name[0]}
+              </Text>
+            </TouchableOpacity>
+            <Text style={styles.profileName}>{userData.first_name}</Text>
+          </View>
+          <View style={styles.notificationIcon}>
+            <TouchableOpacity
+              onPress={() => navigation.navigate('TerminalScreen')}>
+              <Ionicons
+                name="terminal"
+                size={hp('2.8%')}
+                color={styles.iconColor}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => navigation.navigate('NotificationScreen')}>
+              <MaterialIcon
+                name="notifications"
+                size={hp('3.7%')}
+                color={styles.iconColor}
+              />
+            </TouchableOpacity>
+          </View>
+        </View>
+        <View>
+          <Text style={styles.headerAnalytics}>Data Analytics</Text>
+        </View>
+        <View style={styles.dataContainer}>
           <TouchableOpacity
-            style={[
-              styles.profileIcon,
-              {backgroundColor: userData.profile_color},
-            ]}
-            onPress={() => navigation.navigate('AdminSettingScreen')}>
-            <Text style={styles.profileInitial}>
-              {userData.first_name && userData.first_name[0]}
+            style={styles.data}
+            onPress={() => navigation.navigate('HomeownerListsScreen')}>
+            <View
+              style={{
+                position: 'absolute',
+                left: 10,
+                top: 10,
+              }}>
+              <MaterialIcons
+                name="manage-accounts"
+                size={hp('3%')}
+                color="#000"
+              />
+            </View>
+            <Text style={styles.dataText}>{homeowners.length}</Text>
+            <Text style={styles.dataSubText}>
+              {homeowners.length > 1 ? 'Homeowners' : 'Homeowner'}
             </Text>
           </TouchableOpacity>
-          <Text style={styles.profileName}>{userData.first_name}</Text>
-        </View>
-        <View style={styles.notificationIcon}>
           <TouchableOpacity
-            onPress={() => navigation.navigate('NotificationScreen')}>
-            <MaterialIcon
-              name="notifications"
-              size={hp('3.6%')}
-              color={styles.iconColor}
-            />
+            style={styles.data}
+            onPress={() => navigation.navigate('SecurityPersonnelListsScreen')}>
+            <View
+              style={{
+                position: 'absolute',
+                left: 10,
+                top: 10,
+              }}>
+              <MaterialIcons
+                name="manage-accounts"
+                size={hp('3%')}
+                color="#000"
+              />
+            </View>
+            <Text style={styles.dataText}>{securityPersonnels.length}</Text>
+            <Text style={styles.dataSubText}>
+              {securityPersonnels.length > 1
+                ? 'Security Personnels'
+                : 'Security Personnel'}
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.data}
+            onPress={() => navigation.navigate('VisitorListsScreen')}>
+            <View
+              style={{
+                position: 'absolute',
+                left: 10,
+                top: 10,
+              }}>
+              <MaterialIcons
+                name="manage-accounts"
+                size={hp('3%')}
+                color="#000"
+              />
+            </View>
+            <Text style={styles.dataText}>{visitors.length}</Text>
+            <Text style={styles.dataSubText}>
+              {visitors.length > 1 ? 'Visitors' : 'Visitor'}
+            </Text>
           </TouchableOpacity>
         </View>
-      </View>
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          paddingTop: 20,
-          paddingBottom: 10,
-        }}>
-        <Text style={styles.headerAnalytics}>Data Analytics</Text>
-      </View>
-      <View style={styles.dataContainer}>
-        <TouchableOpacity
-          style={[styles.data, {backgroundColor: '#533747'}]}
-          onPress={() => navigation.navigate('HomeownerListsScreen')}>
-          <Text style={styles.dataText}>{homeowners.length}</Text>
-          <Text style={styles.dataSubText}>
-            {homeowners.length > 1 ? 'Homeowners' : 'Homeowner'}
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.data, {backgroundColor: '#048A81'}]}
-          onPress={() => navigation.navigate('SecurityPersonnelListsScreen')}>
-          <Text style={styles.dataText}>{securityPersonnels.length}</Text>
-          <Text style={styles.dataSubText}>
-            {securityPersonnels.length > 1
-              ? 'Security Personnels'
-              : 'Security Personnel'}
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.data, {backgroundColor: '#364958'}]}
-          onPress={() => navigation.navigate('VisitorListsScreen')}>
-          <Text style={styles.dataText}>{visitors.length}</Text>
-          <Text style={styles.dataSubText}>
-            {visitors.length > 1 ? 'Visitors' : 'Visitor'}
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[
-            styles.data,
-            {backgroundColor: '#44633F'},
-          ]}></TouchableOpacity>
-      </View>
-      <View style={styles.analyticsContainer}>
-        <TouchableOpacity style={styles.analytics}></TouchableOpacity>
-        <TouchableOpacity style={styles.analytics}></TouchableOpacity>
-      </View>
-      <View style={styles.analyticsContainer}>
-        <Text style={styles.headerAnalytics}>Today's Visitor</Text>
-      </View>
-      <View style={styles.analyticsContainer}>
-        <Text style={{color: 'black'}}>Amenities</Text>
         <View>
-          <Text style={{color: 'black'}}>John Doe</Text>
-          <Text style={{color: 'black'}}>Swimming Pool</Text>
-          <Text style={{color: 'black'}}>5:00 PM - 12:00 PM</Text>
-          <Text style={{color: 'black'}}>{`12 people`}</Text>
+          <Text style={styles.headerAnalytics}>Today's Visitor</Text>
         </View>
-      </View>
-    </ScrollView>
+        {todayVisitors.map(visitor => (
+          <View
+            key={visitor.hn_id}
+            style={{
+              flexDirection: 'row',
+              alignItems: 'flex-start',
+              backgroundColor: '#f6f8fa',
+              borderRadius: 4,
+              paddingVertical: hp('2%'),
+              paddingHorizontal: hp('2%'),
+              gap: 20,
+            }}>
+            <View
+              style={{
+                backgroundColor: visitor.profile_color,
+                height: hp('5%'),
+                width: hp('5%'),
+                justifyContent: 'center',
+                alignContent: 'center',
+                borderRadius: 50,
+              }}>
+              <Text
+                style={{
+                  fontSize: hp('2%'),
+                  color: '#fff',
+                  alignSelf: 'center',
+                }}>
+                {visitor.first_name[0]}
+              </Text>
+            </View>
+            <View>
+              <Text style={{color: '#000', fontSize: hp('2%'), color: '#000'}}>
+                {visitor.first_name} {visitor.last_name}
+              </Text>
+              <Text
+                style={{color: '#000', fontSize: hp('1.8%'), color: '#666'}}>
+                {visitor.email}
+              </Text>
+              <Text
+                style={{color: '#000', fontSize: hp('1.8%'), color: '#666'}}>
+                {visitor.contact_num}
+              </Text>
+            </View>
+          </View>
+        ))}
+        <View>
+          <Text style={styles.headerAnalytics}>Upcoming Visitor</Text>
+        </View>
+        {upcomingVisitors.map(visitor => (
+          <View
+            key={visitor.hn_id}
+            style={{
+              flexDirection: 'row',
+              alignItems: 'flex-start',
+              backgroundColor: '#f6f8fa',
+              borderRadius: 4,
+              paddingVertical: hp('2%'),
+              paddingHorizontal: hp('2%'),
+              gap: 20,
+            }}>
+            <View
+              style={{
+                backgroundColor: visitor.profile_color,
+                height: hp('5%'),
+                width: hp('5%'),
+                justifyContent: 'center',
+                alignContent: 'center',
+                borderRadius: 50,
+              }}>
+              <Text
+                style={{
+                  fontSize: hp('2%'),
+                  color: '#fff',
+                  alignSelf: 'center',
+                }}>
+                {visitor.first_name[0]}
+              </Text>
+            </View>
+            <View>
+              <Text style={{color: '#000', fontSize: hp('2%'), color: '#000'}}>
+                {visitor.first_name} {visitor.last_name}
+              </Text>
+              <Text
+                style={{color: '#000', fontSize: hp('1.8%'), color: '#666'}}>
+                {visitor.email}
+              </Text>
+              <Text
+                style={{color: '#000', fontSize: hp('1.8%'), color: '#666'}}>
+                {visitor.contact_num}
+              </Text>
+            </View>
+          </View>
+        ))}
+      </ScrollView>
+    </View>
   );
 };
 

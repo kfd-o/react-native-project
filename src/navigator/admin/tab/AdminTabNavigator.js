@@ -57,7 +57,7 @@ const AdminTabNavigator = ({navigation}) => {
             <MaterialCommunityIcons
               name="account"
               size={hp('3.6%')}
-              color={styles.iconColor.color}
+              color={styles.iconColor}
             />
             <Text style={styles.text}>New Homeowner Account</Text>
           </TouchableOpacity>
@@ -69,7 +69,7 @@ const AdminTabNavigator = ({navigation}) => {
             <MaterialCommunityIcons
               name="account"
               size={hp('3.6%')}
-              color={styles.iconColor.color}
+              color={styles.iconColor}
             />
             <Text style={styles.text}>New Security Personnel Account</Text>
           </TouchableOpacity>
@@ -79,7 +79,7 @@ const AdminTabNavigator = ({navigation}) => {
             <MaterialCommunityIcons
               name="home-variant"
               size={hp('3.6%')}
-              color={styles.iconColor.color}
+              color={styles.iconColor}
             />
             <Text style={styles.text}>New House Model</Text>
           </TouchableOpacity>

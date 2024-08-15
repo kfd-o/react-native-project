@@ -21,6 +21,10 @@ import randomColor from '../../utils/randomColor';
 import api from '../../api/api';
 import {getStyles} from '../../assets/styles/admin/signupHomeownerTheme';
 import {useSelector} from 'react-redux';
+import InputComponent from '../../components/InputComponent';
+import HeaderComponent from '../../components/HeaderComponent';
+import ButtonComponent from '../../components/ButtonComponent';
+import HeaderNavigatorComponent from '../../components/HeaderNavigatorComponent';
 
 const SignupHomeownerScreen = ({navigation}) => {
   const value = useSelector(state => state.theme.value);
@@ -63,92 +67,69 @@ const SignupHomeownerScreen = ({navigation}) => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.headerContainer}>
-        <Pressable onPress={() => navigation.goBack()}>
-          <Icon name="arrow-back" size={hp('3%')} color={styles.iconColor} />
-        </Pressable>
-        <Text style={styles.headerText}>Homeowner</Text>
-      </View>
-      <ScrollView>
-        <View style={{paddingVertical: hp('2%')}}>
-          <Text style={styles.subHeader}>Homeowner Details</Text>
-        </View>
-
+      <HeaderNavigatorComponent header="Homeowner" />
+      <ScrollView
+        keyboardShouldPersistTaps="always"
+        showsVerticalScrollIndicator={false}>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <View style={styles.inputSection}>
-            <View style={styles.inputContainer}>
-              <TextInput
-                style={styles.textInput}
+          <View style={{flex: 1}}>
+            <View style={{paddingVertical: hp('2%')}}>
+              <HeaderComponent header="Create an account" />
+            </View>
+            <View style={{gap: 20}}>
+              <InputComponent
+                textHeader="First Name"
+                user="user"
+                handleChange={handleChange}
+                name="first_name"
                 value={formData.first_name}
-                onChangeText={value => handleChange('first_name', value)}
-                placeholder="First Name"
-                placeholderTextColor={styles.placeholderTextColor}
               />
-            </View>
-            <View style={styles.inputContainer}>
-              <TextInput
-                style={styles.textInput}
+              <InputComponent
+                textHeader="Last Name"
+                user="user"
+                handleChange={handleChange}
+                name="last_name"
                 value={formData.last_name}
-                onChangeText={value => handleChange('last_name', value)}
-                placeholder="Last Name"
-                placeholderTextColor={styles.placeholderTextColor}
               />
-            </View>
-            <View style={styles.inputContainer}>
-              <TextInput
-                style={styles.textInput}
+              <InputComponent
+                textHeader="Username"
+                user="user"
+                handleChange={handleChange}
+                name="username"
                 value={formData.username}
-                onChangeText={value => handleChange('username', value)}
-                placeholder="Username"
-                placeholderTextColor={styles.placeholderTextColor}
               />
-            </View>
-            <View style={styles.inputContainer}>
-              <TextInput
-                style={styles.textInput}
+              <InputComponent
+                textHeader="Password"
+                handleChange={handleChange}
+                name="password"
                 value={formData.password}
-                onChangeText={value => handleChange('password', value)}
-                placeholder="Password"
-                secureTextEntry
-                placeholderTextColor={styles.placeholderTextColor}
               />
-            </View>
-            <View style={styles.inputContainer}>
-              <TextInput
-                style={styles.textInput}
+              <InputComponent
+                textHeader="Address"
+                handleChange={handleChange}
+                name="address"
                 value={formData.address}
-                onChangeText={value => handleChange('address', value)}
-                placeholder="Address"
-                placeholderTextColor={styles.placeholderTextColor}
               />
-            </View>
-            <View style={styles.inputContainer}>
-              <TextInput
-                style={styles.textInput}
+              <InputComponent
+                textHeader="Email"
+                handleChange={handleChange}
+                name="email"
                 value={formData.email}
-                onChangeText={value => handleChange('email', value)}
-                placeholder="Email"
-                keyboardType="email-address"
-                placeholderTextColor={styles.placeholderTextColor}
+              />
+              <InputComponent
+                textHeader="Contact Number"
+                handleChange={handleChange}
+                name="contact_num"
+                value={formData.contact_num}
+                numeric={true}
               />
             </View>
-            <View style={styles.inputContainer}>
-              <TextInput
-                style={styles.textInput}
-                value={formData.contact_num}
-                onChangeText={value => handleChange('contact_num', value)}
-                placeholder="Contact Number"
-                keyboardType="phone-pad"
-                placeholderTextColor={styles.placeholderTextColor}
-              />
+
+            <View style={{paddingVertical: hp('4%')}}>
+              <ButtonComponent name="Create Account" press={handleSignup} />
             </View>
           </View>
         </TouchableWithoutFeedback>
-        <View style={{paddingVertical: hp('4%')}}>
-          <TouchableOpacity style={styles.buttonSignup} onPress={handleSignup}>
-            <Text style={styles.signupText}>Signup</Text>
-          </TouchableOpacity>
-        </View>
       </ScrollView>
     </View>
   );

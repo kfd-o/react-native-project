@@ -1,14 +1,11 @@
 import React, {useEffect} from 'react';
-import {useColorScheme} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-import {useSelector, useDispatch} from 'react-redux';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import {lightMode, darkMode, systemMode} from '../../../features/themeSlice';
-import {getStyles} from '../../../assets/styles/admin/tabTheme';
+import {useSelector} from 'react-redux';
+import {getStyles} from '../../../assets/styles/visitor/tabTheme';
 import VisitorScreen from '../../../screens/visitor/VisitorScreen';
 import VisitorSettingScreen from '../../../screens/visitor/VisitorSettingScreen';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -16,34 +13,8 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 const Tab = createBottomTabNavigator();
 
 const VisitorTabNavigator = () => {
-  const value = useSelector(state => state.theme.value);
-  const dispatch = useDispatch();
-  const color = useColorScheme();
-  const styles = getStyles(value);
-
-  const getTheme = async () => {
-    try {
-      const phoneTheme = await AsyncStorage.getItem('theme');
-      if (phoneTheme === null) {
-        dispatch(systemMode(color));
-        await AsyncStorage.setItem('theme', 'system');
-      } else {
-        if (phoneTheme === 'light') {
-          dispatch(lightMode());
-        } else if (phoneTheme === 'dark') {
-          dispatch(darkMode());
-        } else {
-          dispatch(systemMode(color));
-        }
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  useEffect(() => {
-    getTheme();
-  }, [color, dispatch]);
+  const theme = useSelector(state => state.theme.value);
+  const styles = getStyles(theme);
 
   return (
     <Tab.Navigator
@@ -59,10 +30,10 @@ const VisitorTabNavigator = () => {
 
           switch (route.name) {
             case 'VisitorScreen':
-              iconName = focused ? 'home-variant' : 'home-variant-outline';
+              iconName = 'home-variant';
               break;
             case 'VisitorSettingScreen':
-              iconName = focused ? 'account' : 'account-outline';
+              iconName = 'account';
               break;
             default:
               break;

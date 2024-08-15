@@ -18,7 +18,6 @@ import {format} from 'date-fns';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import api from '../../api/api';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 const HomeownerNotificationDetails = ({route, navigation}) => {
   const {id} = route.params;
@@ -38,7 +37,8 @@ const HomeownerNotificationDetails = ({route, navigation}) => {
       console.log(error);
     }
   };
-  console.log('----------------->', notifications);
+
+  console.log(notifications);
 
   const formatDate = dateString => {
     return format(new Date(dateString), 'yyyy-MM-dd');
@@ -61,8 +61,6 @@ const HomeownerNotificationDetails = ({route, navigation}) => {
     setModalVisible(!modalVisible);
   };
 
-  console.log('-------------->', notifications);
-
   const handleConfirm = async () => {
     try {
       const response = await api.patch(
@@ -73,6 +71,14 @@ const HomeownerNotificationDetails = ({route, navigation}) => {
         setModalVisible(!modalVisible);
         setModalSuccessVisible(!modalSuccessVisible);
         fetchNotificationsById(id);
+        try {
+          const response = await api.post(`/qr-code/${notifications[0].id}`, {
+            notifications,
+          });
+          console.log(response.data);
+        } catch (error) {
+          console.log(error);
+        }
       }
     } catch (error) {
       console.error('Error', error);
@@ -81,20 +87,6 @@ const HomeownerNotificationDetails = ({route, navigation}) => {
 
   const handleContinue = () => {
     setModalSuccessVisible(!modalSuccessVisible);
-  };
-
-  const openURL = async url => {
-    try {
-      const supported = await Linking.canOpenURL(url);
-      if (supported) {
-        await Linking.openURL(url);
-      } else {
-        Alert.alert(`Don't know how to open ${url}`);
-      }
-    } catch (error) {
-      console.error('An error occurred', error);
-      Alert.alert('Failed to open URL');
-    }
   };
 
   useEffect(() => {
@@ -313,16 +305,6 @@ const HomeownerNotificationDetails = ({route, navigation}) => {
                   justifyContent: 'center',
                   alignItems: 'center',
                 }}>
-                <View style={{position: 'absolute', left: 0}}>
-                  <TouchableOpacity
-                    onPress={() => openURL(`tel:${notif.contact_num}`)}>
-                    <MaterialIcons
-                      name="call"
-                      size={hp('3.6%')}
-                      color="#5D6D7E"
-                    />
-                  </TouchableOpacity>
-                </View>
                 <View>
                   <Text
                     style={{

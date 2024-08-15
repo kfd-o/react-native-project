@@ -1,4 +1,5 @@
 import VisitorNotificationScreen from '../../../screens/visitor/VisitorNotificationScreen';
+import VisitorNotificationDetails from '../../../screens/visitor/VisitorNotificationDetails';
 import HouseDetailScreen from '../../../screens/visitor/HouseDetailScreen';
 import RequestScreen from '../../../screens/visitor/RequestScreen';
 import VisitorTabNavigator from '../tab/VisitorTabNavigator';
@@ -13,27 +14,32 @@ const VisitorNavigator = () => (
     <Stack.Screen
       name="VisitorTabNavigator"
       component={VisitorTabNavigator}
-      options={{headerShown: false}}
+      options={{headerShown: false, animation: 'none'}}
     />
     <Stack.Screen
       name="VisitorNotificationScreen"
       component={VisitorNotificationScreen}
-      options={{headerShown: false}}
+      options={{headerShown: false, animation: 'none'}}
+    />
+    <Stack.Screen
+      name="VisitorNotificationDetails"
+      component={VisitorNotificationDetails}
+      options={{headerShown: false, animation: 'none'}}
     />
     <Stack.Screen
       name="RequestScreen"
       component={RequestScreen}
-      options={{headerShown: false}}
+      options={{headerShown: false, animation: 'none'}}
     />
     <Stack.Screen
       name="HouseDetailScreen"
       component={HouseDetailScreen}
-      options={{headerShown: false, animation: 'slide_from_bottom'}}
+      options={{headerShown: false, animation: 'none'}}
     />
     <Stack.Screen
       name="AuthNavigation"
       component={AuthNavigation}
-      options={{headerShown: false, animation: 'slide_from_bottom'}}
+      options={{headerShown: false, animation: 'none'}}
     />
   </Stack.Navigator>
 );

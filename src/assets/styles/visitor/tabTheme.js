@@ -31,16 +31,16 @@ const lightStyles = StyleSheet.create({
     alignItems: 'center',
   },
   plusButton: {
-    backgroundColor: '#fff',
-    borderWidth: 1,
-    borderColor: '#5D6D7E',
+    backgroundColor: '#36454F',
     width: hp('5%'),
     height: hp('5%'),
     borderRadius: hp('3.5%'),
     justifyContent: 'center',
     alignItems: 'center',
   },
-
+  addIconColor: {
+    color: 'white',
+  },
   backgroundStyle: {
     backgroundColor: '#fff',
   },
@@ -69,16 +69,17 @@ const lightStyles = StyleSheet.create({
     paddingVertical: hp('1%'),
   },
   text: {
-    color: '#000',
+    color: '#5D6D7E',
   },
-  iconColor: '#000',
-
+  iconColor: {
+    color: '#5D6D7E',
+  },
   vectorIcon: {
-    color: '#5D6D7E', //charcoal ya kule
+    color: '#36454F', //charcoal ya kule
   },
 
   vectorIconText: {
-    color: '#5D6D7E',
+    color: 'black',
   },
 });
 
@@ -156,6 +157,9 @@ const darkStyles = StyleSheet.create({
   },
   vectorIconText: {
     color: '#F5F5F5',
+  },
+  tabBarStyle: {
+    backgroundColor: '#222222',
   },
 });
 

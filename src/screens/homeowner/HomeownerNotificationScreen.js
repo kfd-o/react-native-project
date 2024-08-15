@@ -5,6 +5,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   ScrollView,
+  ActivityIndicator,
 } from 'react-native';
 import {
   widthPercentageToDP as wp,
@@ -21,8 +22,8 @@ import io from 'socket.io-client';
 const HomeownerNotificationScreen = ({navigation}) => {
   const [userData, setUserData] = useState(null);
   const [notifications, setNotifications] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const socket = useRef(null);
-  console.log('USERRRRRRRRRRRRRRRRRRR', userData);
 
   const fetchNotifications = async userId => {
     const accessToken = await AsyncStorage.getItem('accessToken');
@@ -33,6 +34,8 @@ const HomeownerNotificationScreen = ({navigation}) => {
       setNotifications(response.data);
     } catch (error) {
       console.log('There is no notifications');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -98,12 +101,6 @@ const HomeownerNotificationScreen = ({navigation}) => {
     checkToken();
   }, []);
 
-  useEffect(() => {
-    if (userData && userData.id) {
-      fetchNotifications(userData.id);
-    }
-  }, [userData]);
-
   useFocusEffect(
     useCallback(() => {
       if (userData && userData.id) {
@@ -115,14 +112,12 @@ const HomeownerNotificationScreen = ({navigation}) => {
   const markNotificationsAsRead = async userId => {
     const accessToken = await AsyncStorage.getItem('accessToken');
 
-    for (const notif of notifications) {
-      try {
-        await api.patch(`/request-visit/is-read/${userId}`, null, {
-          headers: {Authorization: `Bearer ${accessToken}`},
-        });
-      } catch (error) {
-        console.log('It is already read!');
-      }
+    try {
+      await api.patch(`/request-visit/is-read/${userId}`, null, {
+        headers: {Authorization: `Bearer ${accessToken}`},
+      });
+    } catch (error) {
+      console.log('It is already read!');
     }
   };
 
@@ -138,7 +133,7 @@ const HomeownerNotificationScreen = ({navigation}) => {
   );
 
   useEffect(() => {
-    socket.current = io('http://192.168.100.91:8080');
+    socket.current = io('http://192.168.32.11:8080');
 
     socket.current.on('connect', () => {
       console.log('Connected to Socket.IO server');
@@ -155,6 +150,16 @@ const HomeownerNotificationScreen = ({navigation}) => {
       socket.current.disconnect();
     };
   }, []);
+
+  if (isLoading) {
+    return (
+      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        <Text>
+          <ActivityIndicator size="large" color="#0000ff" />
+        </Text>
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>
